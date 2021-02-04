@@ -1,0 +1,6 @@
+{
+  "svelteSortOrder": "scripts-markup-styles",
+  "svelteStrictMode": true,
+  "singleQuote": true,
+  "semi": true
+}
