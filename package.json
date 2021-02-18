@@ -12,6 +12,7 @@
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^8.0.0",
     "archieml": "^0.4.2",
+    "d3": "^6.5.0",
     "fs": "0.0.1-security",
     "request": "^2.88.2",
     "rollup": "^2.3.4",
