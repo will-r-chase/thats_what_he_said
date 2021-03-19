@@ -14,8 +14,9 @@
 
 <style>
   #card-list-wrapper {
-    display: flex;
-    flex-direction: column;
-    margin: 0 1rem;
+    margin: 3rem;
+    display: grid;
+    grid-gap: 5rem;
+    grid-template-columns: repeat(auto-fill, 400px);
   }
 </style>

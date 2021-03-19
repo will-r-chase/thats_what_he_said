@@ -3,6 +3,22 @@
   import * as d3 from 'd3';
   let quotes = copy.misquotes;
 
+  const colorScale = d3
+    .scaleOrdinal()
+    .domain([
+      'non-linguistic',
+      'phonological',
+      'morphological',
+      'syntactic',
+      'semantic'
+    ])
+    .range(['#ffffff', '#985F5F', '#5F6398', '#DBA54E', '#6A6D5F']);
+
+  for (let quote of quotes) {
+    quote.color = colorScale(quote.error_domain);
+  }
+
+  console.log(quotes);
   let quotes_nested = d3.groups(quotes, d => d.season, d => d.ep_title);
   console.log(quotes_nested);
 </script>
@@ -16,7 +32,9 @@
           <div class="episode">
             {#each episode[1] as quote}
               {#if quote.lines}
-                <div class="paper"></div>
+                <div
+                  class="paper"
+                  style="background-color: {quote.color}"></div>
               {/if}
             {/each}
           </div>
@@ -33,7 +51,6 @@
     display: flex;
     flex-direction: row;
     align-items: flex-end;
-    padding: 20px;
   }
   .season-wrapper {
     display: flex;
@@ -42,7 +59,7 @@
   }
   .season {
     height: 90%;
-    background: #e29090;
+    /* background: #e29090; */
     margin: 10px;
     position: relative;
     display: flex;
@@ -58,17 +75,38 @@
   .episode {
     height: 100%;
     width: 17px;
-    background: #5f6398;
+    /* background: #5f6398; */
     margin: 0px 2px;
     display: flex;
     flex-direction: column-reverse;
     padding: 2px;
   }
   .paper {
+    position: relative;
     height: 17px;
     width: 13px;
     background: #fff;
     border: 1px solid black;
     margin-bottom: 2px;
+    clip-path: polygon(
+      0 0,
+      7px 0%,
+      100% 6px,
+      100% 80%,
+      100% 100%,
+      0 100%,
+      0% 80%,
+      0% 20%
+    );
+  }
+  .paper::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    right: -1px;
+    width: 0;
+    height: 0;
+    border-bottom: 6px solid black;
+    border-right: 6px solid transparent;
   }
 </style>
