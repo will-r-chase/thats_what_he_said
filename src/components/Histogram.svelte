@@ -1,7 +1,19 @@
 <script>
-  import * as copy from '../data/copy.json';
+  import * as copy from '../../data/copy.json';
   import * as d3 from 'd3';
-  let quotes = copy.misquotes;
+  import {
+    quoteStore,
+    quoteIndexStore,
+    currentQuoteStore,
+    cutTimeStore,
+    videoTimeStore
+  } from '../../stores/quoteStore.js';
+
+  let quotes = $quoteStore;
+  function handleClick(event) {
+    videoTimeStore.update(index => +event.target.dataset.cuttime);
+    cutTimeStore.update(index => +$currentQuoteStore[0].cut_time);
+  }
 
   const colorScale = d3
     .scaleOrdinal()
@@ -15,12 +27,12 @@
     .range(['#ffffff', '#985F5F', '#5F6398', '#DBA54E', '#6A6D5F']);
 
   for (let quote of quotes) {
-    quote.color = colorScale(quote.error_domain);
+    quote.color = quote.error_domain
+      ? colorScale(quote.error_domain.toLowerCase())
+      : '#000';
   }
 
-  console.log(quotes);
   let quotes_nested = d3.groups(quotes, d => d.season, d => d.ep_title);
-  console.log(quotes_nested);
 </script>
 
 <div class="wrapper">
@@ -32,9 +44,14 @@
           <div class="episode">
             {#each episode[1] as quote}
               {#if quote.lines}
-                <div
-                  class="paper"
-                  style="background-color: {quote.color}"></div>
+                <div class:active="{quote.id === $currentQuoteStore[0].id}">
+                  <div
+                    class="paper"
+                    id="{quote.id}"
+                    data-cutTime="{quote.cut_time}"
+                    style="background-color: {quote.color}"
+                    on:click="{handleClick}"></div>
+                </div>
               {/if}
             {/each}
           </div>
@@ -45,6 +62,18 @@
 </div>
 
 <style>
+  .active {
+    position: relative;
+  }
+  .active::before {
+    content: '';
+    background-color: rgba(240, 241, 118, 0.8);
+    width: 19px;
+    height: 22px;
+    position: absolute;
+    top: -2px;
+    left: -3px;
+  }
   .wrapper {
     background: #c4c4c4;
     position: relative;
@@ -108,5 +137,8 @@
     height: 0;
     border-bottom: 6px solid black;
     border-right: 6px solid transparent;
+  }
+  .paper:hover {
+    cursor: pointer;
   }
 </style>

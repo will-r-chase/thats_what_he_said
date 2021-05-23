@@ -1,6 +1,6 @@
 <script>
   export let quote;
-  let lines = quote.lines;
+  $: lines = quote.lines;
   import Postit from './Postit.svelte';
 </script>
 
